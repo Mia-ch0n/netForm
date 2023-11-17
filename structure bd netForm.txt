@@ -1,0 +1,99 @@
+Table "User" (Membres) :
+
+user_id (clé primaire)
+username
+email
+password (hashé)
+status (en attente, approuvé, banni, etc.)
+inscription_date  (auto)
+birthdate
+profile_picture
+gender
+
+
+Table "Friendship" (Relations d'amitié) :
+
+friendship_id (clé primaire)
+sender_id (clé étrangère vers la table User, représentant l'utilisateur qui envoie l'invitation)
+reciever_id (clé étrangère vers la table User, représentant l'utilisateur qui reçoit l'invitation)
+status (pending, accepted, refused)
+invitation_date(auto)
+
+
+Table "Post" (Publications) :
+
+post_id (clé primaire)
+user_id (clé étrangère vers la table User, représentant l'auteur de la publication)
+content  
+date_post
+Attachment
+likes_count
+comments_count 
+
+
+Table "Comment" :
+
+comment_id ( clé primaire)
+user_id ( clé etrangere vers la table user , represantant l'auteur du commentaire)
+post_id (clé etrangere vers la table post , represantant le post sousquelle appartient le commentaire)
+content 
+
+Table "Like" :
+
+like_id ( clé primaire)
+user_id ( clé etrangere vers la table user , represantant l'auteur du commentaire)
+post_id (clé etrangere vers la table post , represantant le post sousquelle appartient le commentaire)
+
+
+
+...
+Table "Moderation" (Avertissements de modération) :
+
+moderation_id (clé primaire)
+user_id (clé étrangère vers la table User, représentant le membre averti)
+moderator_id (clé étrangère vers la table User, représentant le modérateur)
+message
+date_warning
+...
+
+
+
+
+
+
+
+
+
+User Table (Membres):
+
+One-to-Many with Friendship: One user can have many friendships.
+One-to-Many with Post: One user can create multiple posts.
+One-to-Many with Comment: One user can write multiple comments.
+Many-to-Many with Like: Many users can like many posts, but the combination of user_id and post_id in the Like table must be unique.
+One-to-Many with Moderation: One user can receive multiple warnings.
+
+Friendship Table (Relations d'amitié):
+
+Many-to-One with User (sender_id): Many friendships can be sent by one user.
+Many-to-One with User (receiver_id): Many friendships can be received by one user.
+Post Table (Publications):
+
+Many-to-One with User: Many posts can be created by one user.
+One-to-Many with Comment: One post can have multiple comments.
+One-to-Many with Like: One post can have multiple likes.
+
+Comment Table:
+
+Many-to-One with User: Many comments can be written by one user.
+Many-to-One with Post: Many comments can belong to one post.
+
+Like Table:
+
+Many-to-One with User: Many likes can be given by one user.
+Many-to-One with Post: Many likes can belong to one post.
+Unique index on (user_id, post_id) to enforce that a user can like a post only once.
+
+Moderation Table (Avertissements de modération):
+
+Many-to-One with User: Many warnings can be issued to one user.
+Many-to-One with User (moderator_id): Many warnings can be issued by one moderator.
